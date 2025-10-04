@@ -45,11 +45,12 @@ const otp_send = async (req, res) => {
   }
 };
 
-// ✅ 3. Mail sender function
+
 const sendotp = async (toemail, otp) => {
   try {
     const transporter = nodemailer.createTransport({
       service: "gmail",
+      port: 587,
       auth: {
         user: "radheshyamdukiya002@gmail.com",
         pass: "bkkc tpje xrvu wsvf", // ✅ keep this in .env file for security
