@@ -49,7 +49,7 @@ const otp_send = async (req, res) => {
 const sendotp = async (toemail, otp) => {
   try {
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",   // Gmail SMTP host
+  host:  "smtp.sendgrid.net",   // Gmail SMTP host
   port: 587,                // TLS port (cloud friendly)
   secure: false,            // false for TLS (port 587)
   auth: {
