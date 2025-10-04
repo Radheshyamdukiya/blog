@@ -16,4 +16,6 @@ const blog=require('./routs/blog.routes');
 app.use('/',blog);
 const showblog=require('./routs/show_blog.routes');
 app.use('/',showblog);
+const otp=require("./routs/email.routes");
+app.use('/',otp);
 module.exports=app;

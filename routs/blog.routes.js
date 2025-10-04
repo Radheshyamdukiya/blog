@@ -18,9 +18,6 @@ routes.get('/creat-blog/:id', async (req, res) => {
     }
 });
 routes.post('/creat-blog/:id', blogController);
-routes.get('/home',async(req,res)=>{
-  res.render('home',{user:User});
-})
 routes.get('/edit-blog/:id',async(req,res)=>{
     const {id}=req.params;
     const blog= await Blog.findById(id);

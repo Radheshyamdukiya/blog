@@ -1,213 +1,355 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Blog</title>
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif;}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | MyBlog</title>
 
-    body{
-      background:#fdfdfd;
-      color:#333;
-      line-height:1.6;
-    }
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    header{
-      background:#fff;
-      padding:15px 40px;
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      box-shadow:0 2px 8px rgba(0,0,0,0.1);
-      position:sticky;
-      top:0;
-      z-index:1000;
-    }
+    <style>
+        :root {
+            --bg-dark: #1a1a2e;
+            --bg-card: #1e1e2d;
+            --primary-accent: #a855f7;
+            --primary-accent-dark: #9333ea;
+            --text-light: #f0f0f0;
+            --text-muted: #a0a0b0;
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
 
-    .logo{
-      font-size:24px;
-      font-weight:bold;
-      color:#0066ff;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
 
-    nav ul{
-      display:flex;
-      list-style:none;
-      gap:25px;
-    }
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
 
-    nav ul li a{
-      text-decoration:none;
-      color:#333;
-      font-weight:500;
-      transition:0.3s;
-    }
+        header {
+            background: rgba(30, 30, 45, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
 
-    nav ul li a:hover{
-      color:#0066ff;
-    }
+        .logo {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--text-light);
+        }
+        
+        .logo a {
+            text-decoration: none;
+            color: inherit;
+        }
 
-    .hero{
-      text-align:center;
-      padding:60px 20px;
-      background:linear-gradient(135deg,#0066ff,#00c6ff);
-      color:white;
-    }
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
 
-    .hero h1{font-size:38px;margin-bottom:15px;}
-    .hero p{font-size:18px;}
+        nav ul li a {
+            text-decoration: none;
+            color: var(--text-muted);
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+            padding-bottom: 5px;
+        }
 
-    .container{
-      display:grid;
-      grid-template-columns:250px 1fr;
-      gap:20px;
-      padding:40px;
-    }
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary-accent);
+            transition: width 0.3s ease;
+        }
+        
+        nav ul li a:hover, nav ul li a.active {
+            color: var(--text-light);
+        }
+        
+        nav ul li a:hover::after, nav ul li a.active::after {
+            width: 100%;
+        }
 
-    .sidebar{
-      background:#fff;
-      padding:20px;
-      border-radius:12px;
-      box-shadow:0 2px 6px rgba(0,0,0,0.1);
-      height:fit-content;
-    }
 
-    .sidebar h3{margin-bottom:15px;color:#0066ff;}
-    .sidebar ul{list-style:none;}
-    .sidebar ul li{margin:12px 0;}
-    .sidebar ul li a{text-decoration:none;color:#444;transition:0.3s;}
-    .sidebar ul li a:hover{color:#0066ff;}
+        .menu-toggle {
+            display: none;
+            font-size: 30px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: var(--text-light);
+        }
 
-    .content{
-      background:#fff;
-      padding:30px;
-      border-radius:12px;
-      box-shadow:0 2px 6px rgba(0,0,0,0.1);
-    }
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+        }
 
-    .content h2{margin-bottom:20px;color:#0066ff;}
-    .content p{font-size:16px;margin-bottom:10px;}
+        .hero h1 {
+            font-size: 42px;
+            margin-bottom: 10px;
+            font-weight: 700;
+            background: -webkit-linear-gradient(135deg, #a855f7, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
 
-    /* Action Buttons */
-    .btn-group{
-      margin-top:25px;
-      display:flex;
-      gap:15px;
-      flex-wrap:wrap;
-    }
+        .hero p {
+            font-size: 18px;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
 
-    .btn{
-      padding:12px 22px;
-      border:none;
-      border-radius:8px;
-      cursor:pointer;
-      font-size:16px;
-      font-weight:500;
-      transition:0.3s;
-      color:white;
-    }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            padding: 40px 5%;
+            justify-content: center;
+        }
 
-    .btn-create{
-      background:linear-gradient(135deg,#28a745,#45d67b);
-    }
-    .btn-create:hover{
-      transform:translateY(-3px);
-      box-shadow:0 4px 10px rgba(40,167,69,0.3);
-    }
+        .sidebar, .content {
+            background: var(--bg-card);
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .sidebar:hover, .content:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+        }
 
-    .btn-read{
-      background:linear-gradient(135deg,#007bff,#00b4ff);
-    }
-    .btn-read:hover{
-      transform:translateY(-3px);
-      box-shadow:0 4px 10px rgba(0,123,255,0.3);
-    }
+        .sidebar {
+            flex: 1 1 280px;
+            max-width: 320px;
+        }
 
-    .btn-edit{
-      background:linear-gradient(135deg,#ffc107,#ff9800);
-    }
-    .btn-edit:hover{
-      transform:translateY(-3px);
-      box-shadow:0 4px 10px rgba(255,193,7,0.3);
-    }
+        .content {
+            flex: 3 1 500px;
+        }
 
-    footer{
-      background:#111;
-      color:#eee;
-      text-align:center;
-      padding:25px 10px;
-      margin-top:40px;
-    }
-    footer img{width:140px;margin-top:10px;}
+        .sidebar h3, .content h2 {
+            margin-bottom: 20px;
+            color: var(--text-light);
+            font-weight: 600;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .sidebar ul {
+            list-style: none;
+        }
 
-    @media(max-width:900px){.container{grid-template-columns:1fr;}}
-    @media(max-width:600px){
-      nav ul{display:none;flex-direction:column;background:#fff;position:absolute;top:70px;right:0;width:200px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
-      nav ul.active{display:flex;}
-      .menu-toggle{display:block;cursor:pointer;font-size:22px;}
-    }
-    .menu-toggle{display:none;}
-  </style>
+        .sidebar ul li {
+            margin: 15px 0;
+        }
+
+        .sidebar ul li a {
+            text-decoration: none;
+            color: var(--text-muted);
+            transition: all 0.3s;
+            font-size: 16px;
+            display: block;
+            padding: 8px;
+            border-radius: 8px;
+        }
+        
+        .sidebar ul li a:hover {
+            color: var(--text-light);
+            background-color: rgba(168, 85, 247, 0.1);
+            transform: translateX(5px);
+        }
+        
+        .content p {
+            margin-bottom: 12px;
+            font-size: 16px;
+            color: var(--text-muted);
+        }
+        
+        .content p strong {
+            color: var(--text-light);
+            min-width: 90px;
+            display: inline-block;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .btn {
+            flex: 1 1 150px;
+            padding: 12px 20px;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-group a {
+            text-decoration: none;
+            flex: 1 1 150px;
+        }
+
+        .btn-create { background: linear-gradient(135deg, #28a745, #238b3a); }
+        .btn-read { background: linear-gradient(135deg, #007bff, #0056b3); }
+        .btn-edit { background: linear-gradient(135deg, var(--primary-accent), var(--primary-accent-dark)); }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        }
+
+        footer {
+            background: #1e1e2d;
+            color: var(--text-muted);
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 30px;
+            border-top: 1px solid var(--border-color);
+        }
+        
+        footer p {
+            margin-bottom: 10px;
+        }
+
+        footer img {
+            width: 120px;
+            filter: grayscale(1) brightness(1.5);
+            opacity: 0.7;
+        }
+
+        @media(max-width: 900px) {
+            .container {
+                flex-direction: column;
+                padding: 30px 5%;
+            }
+            .sidebar {
+                max-width: 100%;
+            }
+            nav ul {
+                display: none;
+                flex-direction: column;
+                background: var(--bg-card);
+                border: 1px solid var(--border-color);
+                position: absolute;
+                top: 70px;
+                right: 5%;
+                width: 250px;
+                padding: 20px;
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+                gap: 10px;
+            }
+            nav ul.active {
+                display: flex;
+            }
+            .menu-toggle {
+                display: block;
+            }
+        }
+        
+        @media (max-width: 500px) {
+            .hero h1 { font-size: 32px; }
+            .hero p { font-size: 16px; }
+            .content, .sidebar { padding: 20px; }
+            .btn-group { flex-direction: column; }
+            .btn-group a { width: 100%; }
+        }
+    </style>
 </head>
 <body>
 
-  <!-- Navbar -->
-  <header>
-    <div class="logo">MyBlog</div>
-    <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-    <nav>
-      <ul id="menu">
-        <li><a href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Blog</a></li>
-        <li><a href="#">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
+    <header>
+        <div class="logo"><a href="#">MyBlog</a></div>
+        <nav>
+            <ul id="menu">
+                <li><a href="#" class="active">Home</a></li>
+                <li><a href="#">About</a></li>
+                <li><a href="#">Blog</a></li>
+                <li><a href="#">Contact</a></li>
+            </ul>
+        </nav>
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    </header>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <h1>Welcome <%= user.username %></h1>
-    <p>Your personal blogging dashboard</p>
-  </section>
+    <section class="hero">
+        <h1>Welcome, <%= user.username %>!</h1>
+        <p>Manage your content with ease from your personal dashboard.</p>
+    </section>
 
-  <!-- Layout -->
-  <div class="container">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <h3>Categories</h3>
-      <ul>
-        <li><a href="#">Tech</a></li>
-        <li><a href="#">Travel</a></li>
-        <li><a href="#">Lifestyle</a></li>
-        <li><a href="#">Education</a></li>
-      </ul>
-    </aside>
+    <div class="container">
+        <aside class="sidebar">
+            <h3>Categories</h3>
+            <ul>
+                <li><a href="#">🚀 Technology</a></li>
+                <li><a href="#">✈️ Travel</a></li>
+                <li><a href="#">🌿 Lifestyle</a></li>
+                <li><a href="#">📚 Education</a></li>
+            </ul>
+        </aside>
 
-    <!-- Content -->
-    <main class="content">
-      <h2>User Information</h2>
-      <p><strong>username:</strong> <%= user.username %></p>
-      <p><strong>Email:</strong> <%= user.email %></p>
+        <main class="content">
+            <h2>User Information</h2>
+            <p><strong>Username:</strong> <%= user.username %></p>
+            <p><strong>Email:</strong> <%= user.email %></p>
+            <p><strong>Mobile:</strong> <%= user.mobilenum || "Not Provided" %></p>
 
-      <!-- Action Buttons -->
-      <div class="btn-group">
-      <a href="/creat-blog/<%=user.id %>"><button  class="btn btn-create" >➕ Create Blog</button></a>  
-       <a href="/show-all-blog"> <button class="btn btn-read">📖 Read Blogs</button></a>
-       <a href="/show-my-blog/<%= user.id %>"> <button class="btn btn-edit">✏️ Edit Blog</button></a>
-      </div>
-    </main>
-  </div>
-  <footer>
-    <p>&copy; 2025 MyBlog | All Rights Reserved</p>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo_TV_2015.png" alt="Logo">
-  </footer>
+            <div class="btn-group">
+                <a href="/creat-blog/<%= user._id %>"><button class="btn btn-create">➕ Create Blog</button></a>
+                <a href="/show-all-blog"><button class="btn btn-read">📖 Read Blogs</button></a>
+                <a href="/show-my-blog/<%= user._id %>"><button class="btn btn-edit">✏️ Edit My Blogs</button></a>
+            </div>
+        </main>
+    </div>
 
-  <script>
-    function toggleMenu(){
-      document.getElementById("menu").classList.toggle("active");
-    }
-  </script>
+    <footer>
+        <p>&copy; 2025 MyBlog | All Rights Reserved</p>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo_TV_2015.png" alt="Logo">
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            document.getElementById("menu").classList.toggle("active");
+        }
+    </script>
 </body>
 </html>
