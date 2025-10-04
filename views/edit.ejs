@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Edit Blog</title>
+
+<!-- SweetAlert2 CSS -->
+<link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+
+<style>
+  * {margin:0; padding:0; box-sizing:border-box; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;}
+
+  body {
+    background:linear-gradient(135deg,#f0f2f5,#e6e9f0);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:flex-start;
+    padding:50px 10px;
+    color:#333;
+  }
+
+  .edit-wrapper {
+    width:100%;
+    max-width:600px;
+    background:#fff;
+    border-radius:20px;
+    padding:40px 30px;
+    box-shadow:0 10px 35px rgba(0,0,0,0.1);
+    transition:0.3s;
+  }
+
+  .edit-wrapper:hover { transform:translateY(-5px); box-shadow:0 15px 45px rgba(0,0,0,0.15); }
+
+  h1 {
+    text-align:center;
+    font-size:2rem;
+    margin-bottom:30px;
+    color:#6a11cb;
+    font-weight:bold;
+    position:relative;
+  }
+
+  h1::after {
+    content:"";
+    display:block;
+    width:80px;
+    height:4px;
+    background:linear-gradient(135deg,#3498db,#6a11cb);
+    margin:10px auto 0;
+    border-radius:2px;
+  }
+
+  form { display:flex; flex-direction:column; gap:25px; }
+
+  input[type="text"], textarea {
+    width:100%;
+    padding:15px 18px;
+    border-radius:12px;
+    border:1px solid #ccc;
+    font-size:1rem;
+    transition:0.3s;
+    background:#f9f9f9;
+  }
+
+  input[type="text"]:focus, textarea:focus {
+    outline:none;
+    border-color:#6a11cb;
+    box-shadow:0 0 10px rgba(106,17,203,0.2);
+    background:#fff;
+  }
+
+  textarea { resize:none; }
+
+  button {
+    padding:15px;
+    font-size:1rem;
+    font-weight:600;
+    border:none;
+    border-radius:12px;
+    background:linear-gradient(135deg,#3498db,#6a11cb);
+    color:#fff;
+    cursor:pointer;
+    transition:0.3s;
+  }
+
+  button:hover { opacity:0.9; transform:translateY(-2px); }
+
+  /* Responsive */
+  @media(max-width:768px){ .edit-wrapper { padding:30px 20px; } h1 { font-size:1.7rem; } input[type="text"], textarea { padding:12px 15px; } button { padding:12px; font-size:0.95rem; } }
+  @media(max-width:480px){ body { padding:20px 10px; } .edit-wrapper { padding:25px 15px; } h1 { font-size:1.5rem; } }
+</style>
+</head>
+<body>
+
+<div class="edit-wrapper">
+  <h1>Edit Your Blog</h1>
+  <form id="editBlogForm">
+    <input type="text" name="title" placeholder="Title" value="<%= blog.title %>" required>
+    <textarea name="describe" placeholder="Description" rows="6" required><%= blog.describe %></textarea>
+    <button type="submit">Update Blog</button>
+  </form>
+</div>
+
+<!-- SweetAlert2 JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  const form = document.getElementById('editBlogForm');
+
+  form.addEventListener('submit', async function(e){
+    e.preventDefault();
+
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+
+    // SweetAlert confirmation before sending
+    const { isConfirmed } = await Swal.fire({
+      title: 'Update Blog?',
+      text: 'Do you want to save these changes?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, update it!',
+      cancelButtonText: 'Cancel',
+      reverseButtons: true
+    });
+
+    if(!isConfirmed) return;
+
+    try {
+      const response = await fetch('/edit-blog/<%= blog.id %>', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      });
+
+      const result = await response.json();
+
+      if(result.success){
+        Swal.fire({
+          title: 'Updated!',
+          text: result.message || 'Blog updated successfully',
+          icon: 'success'
+        });
+      } else {
+        Swal.fire({
+          title: 'Error!',
+          text: result.message || 'Something went wrong',
+          icon: 'error'
+        });
+      }
+    } catch(err){
+      Swal.fire({
+        title: 'Error!',
+        text: 'Server error. Please try again later.',
+        icon: 'error'
+      });
+      console.error(err);
+    }
+  });
+</script>
+
+</body>
+</html>
