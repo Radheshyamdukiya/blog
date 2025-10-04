@@ -48,14 +48,18 @@ const otp_send = async (req, res) => {
 
 const sendotp = async (toemail, otp) => {
   try {
-    const transporter = nodemailer.createTransport({
-      service: "gmail",
-      port: 587,
-      auth: {
-        user: "radheshyamdukiya002@gmail.com",
-        pass: "bkkc tpje xrvu wsvf", // ✅ keep this in .env file for security
-      },
-    });
+const transporter = nodemailer.createTransport({
+  host: "smtp.gmail.com",   // Gmail SMTP host
+  port: 587,                // TLS port (cloud friendly)
+  secure: false,            // false for TLS (port 587)
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.PASS,
+  },
+  tls: {
+    rejectUnauthorized: false, // Cloud servers ke liye safe option
+  },
+});
 
     const mailOptions = {
       from: '"OTP Service" <radheshyamdukiya002@gmail.com>',
