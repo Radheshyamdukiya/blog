@@ -1,12 +1,7 @@
 const mongoose=require("mongoose");
 const db=async()=>{
     try{
-        await mongoose.connect(process.env.MONGO_URL,
-            {
-            useNewUrlParser: true,
-  useUnifiedTopology: true
-            }
-        )
+        await mongoose.connect(process.env.MONGO_URL)
         .then(()=>{
             console.log("connected");
         })

@@ -1,12 +1,16 @@
-const nodemailer = require("nodemailer");
-const { otp_data } = require('../services/otp'); // ✅ destructure sahi se import karo
+// Step 1: Nodemailer ko hata kar @sendgrid/mail ko add karein
+const sgMail = require('@sendgrid/mail');
+const { otp_data } = require('../services/otp');
 
-// ✅ 1. OTP generate function
+// API Key ko yahan set karein (yeh aapke .env file se PASS variable utha lega)
+sgMail.setApiKey(process.env.PASS);
+
+// OTP generate function waisa hi rahega
 function otpgenerate() {
-  return Math.floor(100000 + Math.random() * 900000); // 6-digit OTP (zyada secure)
+  return Math.floor(100000 + Math.random() * 900000);
 }
 
-// ✅ 2. Controller function
+// Controller function bhi waisa hi rahega
 const otp_send = async (req, res) => {
   try {
     const { email } = req.query;
@@ -19,20 +23,19 @@ const otp_send = async (req, res) => {
 
     const otp = otpgenerate();
 
-    // ✅ send OTP via email
+    // Naya sendotp function call hoga
     await sendotp(email, otp);
 
-    // ✅ save OTP to DB via service
+    // DB mein save karne ka logic waisa hi hai
     await otp_data({ email, otp });
 
-    console.log("OTP sent and saved");
+    console.log("OTP sent and saved via SendGrid API");
 
-    // ✅ proper response
     return res.json({
       success: true,
       message: "OTP sent successfully",
       email: email,
-      otp: otp, // remove this in production for security
+      otp: otp, // Ise production mein hata dein
     });
 
   } catch (err) {
@@ -46,36 +49,28 @@ const otp_send = async (req, res) => {
 };
 
 
+// Step 2: Humne sendotp function ko poori tarah se badal diya hai
 const sendotp = async (toemail, otp) => {
   try {
-const transporter = nodemailer.createTransport({
-  host:  "smtp.sendgrid.net",   // Gmail SMTP host
-  port: 587,                // TLS port (cloud friendly)
-  secure: false,            // false for TLS (port 587)
-  auth: {
-    user: process.env.EMAIL,
-    pass: process.env.PASS,
-  },
-  tls: {
-    rejectUnauthorized: false, // Cloud servers ke liye safe option
-  },
-});
-
-    const mailOptions = {
-      from: '"OTP Service" <radheshyamdukiya002@gmail.com>',
+    const msg = {
       to: toemail,
-      subject: "Your OTP Code",
+      from: 'radheshyamdukiya002@gmail.com', // Yeh email SendGrid par VERIFIED hona zaroori hai
+      subject: 'Your OTP Code',
       html: `<h3>Your OTP is: <b>${otp}</b></h3>`,
     };
 
-    const info = await transporter.sendMail(mailOptions);
-    console.log("✅ OTP sent successfully to:", toemail);
-    return info;
+    // Email bhejne ka naya tareeka
+    await sgMail.send(msg);
+    console.log("✅ OTP sent successfully using SendGrid API to:", toemail);
 
   } catch (err) {
-    console.error("❌ Email send failed:", err);
-    throw err; // error controller tak bhejna zaroori hai
+    console.error("❌ SendGrid API send failed:", err);
+    // Isse humein asli error pata chalega
+    if (err.response) {
+      console.error(err.response.body);
+    }
+    throw err; // error ko controller tak bhejna zaroori hai
   }
 };
 
-module.exports =  otp_send ;
+module.exports = otp_send;
