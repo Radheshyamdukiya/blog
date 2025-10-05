@@ -4,18 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard | MyBlog</title>
-
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-
     <style>
         :root {
-            --bg-dark: #1a1a2e;
-            --bg-card: #1e1e2d;
+            --bg-dark: #121212;
+            --bg-card: #1e1e1e;
             --primary-accent: #a855f7;
-            --primary-accent-dark: #9333ea;
+            --primary-accent-light: rgba(168, 85, 247, 0.1);
             --text-light: #f0f0f0;
             --text-muted: #a0a0b0;
-            --border-color: rgba(255, 255, 255, 0.1);
+            --border-color: rgba(255, 255, 255, 0.15);
+            --success-color: #22c55e;
+            --info-color: #3b82f6;
         }
 
         * {
@@ -29,12 +29,10 @@
             background-color: var(--bg-dark);
             color: var(--text-light);
             line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
 
         header {
-            background: rgba(30, 30, 45, 0.8);
+            background: rgba(30, 30, 30, 0.7);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             padding: 15px 5%;
@@ -52,47 +50,37 @@
             font-weight: 700;
             color: var(--text-light);
         }
-        
-        .logo a {
-            text-decoration: none;
-            color: inherit;
-        }
 
         nav ul {
             display: flex;
             list-style: none;
             gap: 30px;
+            align-items: center;
         }
 
-        nav ul li a {
+        nav ul a {
             text-decoration: none;
             color: var(--text-muted);
             font-weight: 500;
             transition: color 0.3s ease;
-            position: relative;
-            padding-bottom: 5px;
         }
 
-        nav ul li a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
+        nav ul a:hover { color: var(--text-light); }
+        
+        /* Logout Button Style */
+        .logout-link {
+            background-color: var(--primary-accent-light);
+            color: var(--primary-accent);
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--primary-accent);
+            font-weight: 600 !important;
+        }
+        .logout-link:hover {
             background-color: var(--primary-accent);
-            transition: width 0.3s ease;
+            color: #fff !important;
         }
         
-        nav ul li a:hover, nav ul li a.active {
-            color: var(--text-light);
-        }
-        
-        nav ul li a:hover::after, nav ul li a.active::after {
-            width: 100%;
-        }
-
-
         .menu-toggle {
             display: none;
             font-size: 30px;
@@ -102,169 +90,193 @@
             color: var(--text-light);
         }
 
-        .hero {
-            text-align: center;
-            padding: 80px 20px;
-            background: var(--bg-card);
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .hero h1 {
-            font-size: 42px;
-            margin-bottom: 10px;
-            font-weight: 700;
-            background: -webkit-linear-gradient(135deg, #a855f7, #ffffff);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .hero p {
-            font-size: 18px;
-            color: var(--text-muted);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
         .container {
-            display: flex;
-            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 5%;
+            display: grid;
+            grid-template-columns: 1fr;
             gap: 30px;
-            padding: 40px 5%;
-            justify-content: center;
         }
 
-        .sidebar, .content {
-            background: var(--bg-card);
+        .user-info-card, .actions-container {
+            background-color: var(--bg-card);
             padding: 30px;
             border-radius: 16px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             border: 1px solid var(--border-color);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .sidebar:hover, .content:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
         }
 
-        .sidebar {
-            flex: 1 1 280px;
-            max-width: 320px;
-        }
-
-        .content {
-            flex: 3 1 500px;
-        }
-
-        .sidebar h3, .content h2 {
-            margin-bottom: 20px;
-            color: var(--text-light);
-            font-weight: 600;
-            padding-bottom: 10px;
+        .user-info-card h2, .actions-container h2 {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
             border-bottom: 1px solid var(--border-color);
         }
         
-        .sidebar ul {
-            list-style: none;
-        }
-
-        .sidebar ul li {
-            margin: 15px 0;
-        }
-
-        .sidebar ul li a {
-            text-decoration: none;
-            color: var(--text-muted);
-            transition: all 0.3s;
-            font-size: 16px;
-            display: block;
-            padding: 8px;
-            border-radius: 8px;
-        }
-        
-        .sidebar ul li a:hover {
-            color: var(--text-light);
-            background-color: rgba(168, 85, 247, 0.1);
-            transform: translateX(5px);
-        }
-        
-        .content p {
-            margin-bottom: 12px;
-            font-size: 16px;
-            color: var(--text-muted);
-        }
-        
-        .content p strong {
-            color: var(--text-light);
-            min-width: 90px;
-            display: inline-block;
-        }
-
-        .btn-group {
+        /* NEW USER CARD STYLING */
+        .profile-header {
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
+            align-items: center;
             gap: 15px;
-            margin-top: 25px;
+            margin-bottom: 30px;
         }
 
-        .btn {
-            flex: 1 1 150px;
-            padding: 12px 20px;
+        .profile-pic {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-accent), var(--info-color));
+            display: grid;
+            place-items: center;
+            padding: 5px;
+        }
+        .profile-pic-inner {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background-color: var(--bg-card);
+             display: grid;
+            place-items: center;
+        }
+        .profile-pic svg {
+            width: 40px;
+            height: 40px;
+            color: var(--text-muted);
+        }
+
+        .username {
+            font-size: 1.5rem;
             font-weight: 600;
-            border: none;
-            border-radius: 10px;
-            color: #fff;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-            font-size: 15px;
+        }
+
+        .info-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .info-list li {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
+            gap: 15px;
         }
-        
-        .btn-group a {
-            text-decoration: none;
-            flex: 1 1 150px;
+        .info-list .icon {
+            color: var(--text-muted);
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
         }
 
-        .btn-create { background: linear-gradient(135deg, #28a745, #238b3a); }
-        .btn-read { background: linear-gradient(135deg, #007bff, #0056b3); }
-        .btn-edit { background: linear-gradient(135deg, var(--primary-accent), var(--primary-accent-dark)); }
+        /* NEW ACTION CARDS STYLING */
+        .actions-grid {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .action-card {
+            background: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 25px;
+            text-decoration: none;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+            background-color: rgba(255, 255, 255, 0.03);
+            box-shadow: 0 0 25px var(--primary-accent-light);
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            flex-shrink: 0;
+            transition: transform 0.3s ease;
+        }
+        .action-card:hover .card-icon {
+            transform: scale(1.1);
+        }
         
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+        .card-icon svg {
+            width: 24px;
+            height: 24px;
+            color: #fff;
+        }
+        
+        .card-arrow {
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            transition: transform 0.3s ease, color 0.3s ease;
+        }
+        .action-card:hover .card-arrow {
+            transform: translateY(-50%) translateX(5px);
+            color: var(--primary-accent);
+        }
+
+        .create-icon { background: linear-gradient(135deg, var(--success-color), #16a34a); }
+        .read-icon { background: linear-gradient(135deg, var(--info-color), #2563eb); }
+        .edit-icon { background: linear-gradient(135deg, var(--primary-accent), #9333ea); }
+        
+        .card-text h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .card-text p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
         }
 
         footer {
-            background: #1e1e2d;
+            background: #101010;
             color: var(--text-muted);
             text-align: center;
-            padding: 30px 20px;
-            margin-top: 30px;
+            padding: 25px;
+            margin-top: 40px;
             border-top: 1px solid var(--border-color);
         }
-        
-        footer p {
-            margin-bottom: 10px;
+
+        @media(min-width: 640px) {
+            .actions-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
         }
 
-        footer img {
-            width: 120px;
-            filter: grayscale(1) brightness(1.5);
-            opacity: 0.7;
-        }
-
-        @media(max-width: 900px) {
+        @media(min-width: 900px) {
             .container {
-                flex-direction: column;
-                padding: 30px 5%;
+                grid-template-columns: 1fr 1.5fr;
             }
-            .sidebar {
-                max-width: 100%;
+            .actions-grid {
+                grid-template-columns: 1fr;
             }
+        }
+        
+        @media(min-width: 1024px) {
+            .actions-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+             .user-info-card, .actions-container {
+                height: 100%;
+            }
+        }
+
+        @media(max-width: 768px) {
             nav ul {
                 display: none;
                 flex-direction: column;
@@ -277,73 +289,89 @@
                 padding: 20px;
                 border-radius: 12px;
                 box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-                gap: 10px;
             }
-            nav ul.active {
-                display: flex;
-            }
-            .menu-toggle {
-                display: block;
-            }
-        }
-        
-        @media (max-width: 500px) {
-            .hero h1 { font-size: 32px; }
-            .hero p { font-size: 16px; }
-            .content, .sidebar { padding: 20px; }
-            .btn-group { flex-direction: column; }
-            .btn-group a { width: 100%; }
+            nav ul.active { display: flex; }
+            .menu-toggle { display: block; }
         }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo"><a href="#">MyBlog</a></div>
+        <div class="logo">MyBlog</div>
+        <div class="menu-toggle" onclick="toggleMenu()">☰</div>
         <nav>
             <ul id="menu">
-                <li><a href="#" class="active">Home</a></li>
+                <li><a href="#">Home</a></li>
                 <li><a href="#">About</a></li>
                 <li><a href="#">Blog</a></li>
                 <li><a href="#">Contact</a></li>
+                <li><a href="/login" class="logout-link">Logout</a></li>
             </ul>
         </nav>
-        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
     </header>
 
-    <section class="hero">
-        <h1>Welcome, <%= user.username %>!</h1>
-        <p>Manage your content with ease from your personal dashboard.</p>
-    </section>
-
     <div class="container">
-        <aside class="sidebar">
-            <h3>Categories</h3>
-            <ul>
-                <li><a href="#">🚀 Technology</a></li>
-                <li><a href="#">✈️ Travel</a></li>
-                <li><a href="#">🌿 Lifestyle</a></li>
-                <li><a href="#">📚 Education</a></li>
-            </ul>
-        </aside>
-
-        <main class="content">
-            <h2>User Information</h2>
-            <p><strong>Username:</strong> <%= user.username %></p>
-            <p><strong>Email:</strong> <%= user.email %></p>
-            <p><strong>Mobile:</strong> <%= user.mobilenum || "Not Provided" %></p>
-
-            <div class="btn-group">
-                <a href="/creat-blog/<%= user._id %>"><button class="btn btn-create">➕ Create Blog</button></a>
-                <a href="/show-all-blog"><button class="btn btn-read">📖 Read Blogs</button></a>
-                <a href="/show-my-blog/<%= user._id %>"><button class="btn btn-edit">✏️ Edit My Blogs</button></a>
+        <div class="user-info-card">
+            <div class="profile-header">
+                <div class="profile-pic">
+                   <div class="profile-pic-inner">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" /></svg>
+                   </div>
+                </div>
+                <div class="username"><%= user.username %></div>
             </div>
-        </main>
+            <ul class="info-list">
+                <li>
+                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /></svg>
+                    <span><%= user.email %></span>
+                </li>
+                <li>
+                    <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3" /></svg>
+                    <span><%= user.mobilenum || "Not Provided" %></span>
+                </li>
+            </ul>
+        </div>
+
+        <div class="actions-container">
+            <h2>Dashboard Actions</h2>
+            <div class="actions-grid">
+                <a href="/creat-blog/<%= user._id %>" class="action-card">
+                    <div class="card-icon create-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+                    </div>
+                    <div class="card-text">
+                        <h3>Create Blog</h3>
+                        <p>Start a new creative story</p>
+                    </div>
+                    <svg class="card-arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+                </a>
+                <a href="/show-all-blog" class="action-card">
+                    <div class="card-icon read-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>
+                    </div>
+                    <div class="card-text">
+                        <h3>Read Blogs</h3>
+                        <p>Explore all published articles</p>
+                    </div>
+                     <svg class="card-arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+                </a>
+                <a href="/show-my-blog/<%= user._id %>" class="action-card">
+                    <div class="card-icon edit-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10" /></svg>
+                    </div>
+                    <div class="card-text">
+                        <h3>Edit My Blogs</h3>
+                        <p>Manage and update your posts</p>
+                    </div>
+                     <svg class="card-arrow" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="24" height="24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+                </a>
+            </div>
+        </div>
     </div>
 
     <footer>
         <p>&copy; 2025 MyBlog | All Rights Reserved</p>
-        <img src="https://upload.wikimedia.org/wikipedia/commons/a/ab/Logo_TV_2015.png" alt="Logo">
     </footer>
 
     <script>
@@ -353,3 +381,4 @@
     </script>
 </body>
 </html>
+

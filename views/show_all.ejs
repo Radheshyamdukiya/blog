@@ -5,274 +5,168 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>All Blogs | MyBlog</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-
     <style>
         :root {
-            --bg-dark: #1a1a2e;
-            --bg-card: #1e1e2d;
+            --bg-dark: #121212;
+            --bg-card: #1e1e1e;
             --primary-accent: #a855f7;
             --text-light: #f0f0f0;
             --text-muted: #a0a0b0;
-            --border-color: rgba(255, 255, 255, 0.1);
+            --border-color: rgba(255, 255, 255, 0.15);
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        body {
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        
+        /* FIX FOR HORIZONTAL SCROLLING */
+        html, body {
+            overflow-x: hidden;
             background-color: var(--bg-dark);
             color: var(--text-light);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
 
-        .navbar {
-            background: rgba(30, 30, 45, 0.8);
+        header {
+            background: rgba(30, 30, 30, 0.7);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             padding: 15px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            position: sticky; top: 0; z-index: 1000;
         }
 
-        .navbar .logo {
-            font-size: 26px;
-            font-weight: 700;
-            color: var(--text-light);
-            text-decoration: none;
-        }
-
-        .navbar .nav-links {
+        /* FIXED LOGO STYLING */
+        .logo {
             display: flex;
-            list-style: none;
-            gap: 30px;
+            align-items: center;
+            gap: 10px;
         }
-        
-        .navbar .nav-links a {
-            text-decoration: none;
-            color: var(--text-muted);
-            font-weight: 500;
-            transition: color 0.3s ease;
-            position: relative;
-            padding-bottom: 5px;
+        .logo a { 
+            font-size: 26px; 
+            font-weight: 700; 
+            color: var(--text-light); 
+            text-decoration: none; 
         }
-
-        .navbar .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: var(--primary-accent);
-            transition: width 0.3s ease;
+        .logo svg {
+            width: 28px;
+            height: 28px;
+            fill: var(--primary-accent);
         }
 
-        .navbar .nav-links a:hover {
-            color: var(--text-light);
-        }
-        
-        .navbar .nav-links a:hover::after {
-            width: 100%;
-        }
+        nav ul { display: flex; list-style: none; gap: 30px; }
+        nav ul a { text-decoration: none; color: var(--text-muted); font-weight: 500; transition: color 0.3s ease; }
+        nav ul a:hover { color: var(--text-light); }
+        .menu-toggle { display: none; font-size: 30px; cursor: pointer; background: none; border: none; color: var(--text-light); }
 
-        .menu-toggle {
-            display: none;
-            font-size: 30px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            color: var(--text-light);
-        }
-
-        .container {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 30px;
-            max-width: 1400px;
-            margin: 30px auto;
-            padding: 0 5%;
-        }
-
-        .sidebar {
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
             background: var(--bg-card);
-            padding: 25px;
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            align-self: start;
-        }
-
-        .sidebar h3 {
-            margin-bottom: 20px;
-            font-weight: 600;
-            padding-bottom: 10px;
             border-bottom: 1px solid var(--border-color);
         }
-
-        .sidebar ul {
-            list-style: none;
+        .hero h1 {
+            font-size: 42px;
+            font-weight: 700;
+            background: -webkit-linear-gradient(135deg, #a855f7, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
+        .hero p { font-size: 18px; color: var(--text-muted); max-width: 600px; margin: 10px auto 0; }
         
-        .sidebar ul li a {
-            text-decoration: none;
-            color: var(--text-muted);
-            transition: all 0.3s;
-            font-size: 16px;
-            display: block;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 5px;
-        }
-        
-        .sidebar ul li a:hover {
-            color: var(--text-light);
-            background-color: rgba(168, 85, 247, 0.1);
-            transform: translateX(5px);
-        }
-
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
         .blog-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 30px;
         }
-
         .blog-card {
             background: var(--bg-card);
             border-radius: 16px;
-            padding: 25px;
             border: 1px solid var(--border-color);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
+            animation: cardFadeIn 0.5s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
         }
-
+        @keyframes cardFadeIn { to { opacity: 1; transform: translateY(0); } }
         .blog-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.25);
         }
-
-        .author-box {
-            color: var(--text-muted);
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 15px;
-        }
+        .card-content { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; }
+        .author-box { color: var(--text-muted); font-size: 14px; margin-bottom: 15px; }
+        .author-box span { color: var(--primary-accent); font-weight: 600; }
+        .blog-card h2 { font-size: 1.6rem; margin-bottom: 12px; color: var(--text-light); }
+        .blog-card p { color: var(--text-muted); font-size: 1rem; line-height: 1.7; flex-grow: 1; }
         
-        .author-box span {
+        .read-more {
+            display: inline-block;
+            margin-top: 20px;
             color: var(--primary-accent);
+            text-decoration: none;
             font-weight: 600;
+            align-self: flex-start;
+            transition: transform 0.3s ease;
+        }
+        .read-more:hover { 
+            text-decoration: underline; 
+            transform: translateX(5px);
         }
 
-        .blog-card h2 {
-            font-size: 1.6rem;
-            margin-bottom: 12px;
-            color: var(--text-light);
-            font-weight: 600;
-        }
-
-        .blog-card p {
-            color: var(--text-muted);
-            font-size: 1rem;
-            line-height: 1.7;
-        }
-
-        @media(max-width: 1024px) {
-            .container {
-                grid-template-columns: 220px 1fr;
-            }
-        }
+        footer { background: #101010; color: var(--text-muted); text-align: center; padding: 25px; margin-top: 50px; border-top: 1px solid var(--border-color); }
 
         @media(max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-                padding: 0 5%;
-                margin-top: 20px;
-            }
-            .sidebar {
-                margin-bottom: 0;
-            }
-            .navbar .nav-links {
-                display: none;
-                flex-direction: column;
-                background: var(--bg-card);
-                border: 1px solid var(--border-color);
-                position: absolute;
-                top: 70px;
-                right: 5%;
-                width: 250px;
-                padding: 20px;
-                border-radius: 12px;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-                gap: 10px;
-            }
-            .navbar .nav-links.active {
-                display: flex;
-            }
-            .menu-toggle {
-                display: block;
-            }
-        }
-
-        @media(max-width: 480px) {
-            .blog-container {
-                grid-template-columns: 1fr;
-            }
-            .blog-card h2 {
-                font-size: 1.4rem;
-            }
+            nav ul { display: none; flex-direction: column; background: var(--bg-card); border: 1px solid var(--border-color); position: absolute; top: 100%; right: 5%; width: 250px; padding: 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+            nav ul.active { display: flex; }
+            .menu-toggle { display: block; }
+            .hero h1 { font-size: 32px; }
         }
     </style>
 </head>
 <body>
 
 <header class="navbar">
-    <a href="#" class="logo">MyBlog</a>
+    <div class="logo">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.7,5.2a1.7,1.7,0,0,0-2.4,0L11.5,12,6.2,5.5a1.8,1.8,0,0,0-2.5,0,1.8,1.8,0,0,0,0,2.5L8.9,12,3.7,17.2a1.8,1.8,0,0,0,0,2.5,1.8,1.8,0,0,0,2.5,0L11.5,14l7.8,9.2a1.7,1.7,0,0,0,2.4,0,1.7,1.7,0,0,0,0-2.4L14.1,12l6.6-6.6A1.7,1.7,0,0,0,20.7,5.2Z"></path></svg>
+        <a href="/home">MyBlog</a>
+    </div>
     <nav>
-        <div class="nav-links" id="menu">
-            <a href="/home">Home</a>
-            <a href="/show-blog">Blogs</a>
-            <a href="/about">About</a>
-            <a href="/contact">Contact</a>
-        </div>
+        <ul id="menu">
+            <li><a href="/home">Home</a></li>
+            <li><a href="/show-all-blog">Blogs</a></li>
+        </ul>
     </nav>
     <button class="menu-toggle" onclick="toggleMenu()">☰</button>
 </header>
 
-<div class="container">
-    <aside class="sidebar">
-        <h3>Categories</h3>
-        <ul>
-            <li><a href="#">🚀 Technology</a></li>
-            <li><a href="#">🌿 Lifestyle</a></li>
-            <li><a href="#">✈️ Travel</a></li>
-            <li><a href="#">🍔 Food</a></li>
-            <li><a href="#">📚 Education</a></li>
-        </ul>
-    </aside>
+<section class="hero">
+    <h1>Explore Our Stories</h1>
+    <p>Discover articles on technology, travel, lifestyle, and more from our community.</p>
+</section>
 
+<div class="container">
     <main class="blog-container">
-        <% blogs.forEach(blog => { %>
-            <div class="blog-card">
-                <div class="author-box">
-                    By <span><%= blog.username %></span>
+        <% blogs.forEach((blog, index) => { %>
+            <a href="#" class="blog-card" style="text-decoration: none; color: inherit; animation-delay: <%= index * 100 %>ms">
+                <div class="card-content">
+                    <div class="author-box">
+                        By <span><%= blog.username %></span>
+                    </div>
+                    <h2><%= blog.title %></h2>
+                    <p><%= blog.describe.substring(0, 120) %>...</p>
+                    <span class="read-more">Read More →</span>
                 </div>
-                <h2><%= blog.title %></h2>
-                <p><%= blog.describe %></p>
-            </div>
+            </a>
         <% }) %>
     </main>
 </div>
+
+<footer>
+    <p>&copy; 2025 MyBlog | All Rights Reserved</p>
+</footer>
 
 <script>
     function toggleMenu() {
@@ -282,3 +176,4 @@
 
 </body>
 </html>
+

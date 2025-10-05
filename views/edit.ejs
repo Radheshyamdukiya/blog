@@ -3,242 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Blog</title>
+    <title>Edit Blog | MyBlog</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root {
-            --bg-dark: #1a1a2e;
-            --bg-card: #1e1e2d;
+            --bg-dark: #121212;
+            --bg-card: #1e1e1e;
             --primary-accent: #a855f7;
             --text-light: #f0f0f0;
             --text-muted: #a0a0b0;
-            --border-color: rgba(255, 255, 255, 0.1);
+            --border-color: rgba(255, 255, 255, 0.15);
+            --warning-color: #f59e0b;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        body {
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        html, body {
+            overflow-x: hidden;
             background-color: var(--bg-dark);
-            min-height: 100vh;
+            color: var(--text-light);
+        }
+        header {
+            background: rgba(30, 30, 30, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 15px 5%;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            padding: 20px;
-            color: var(--text-light);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky; top: 0; z-index: 1000;
         }
-
-        .edit-wrapper {
-            width: 100%;
-            max-width: 650px;
+        .logo { display: flex; align-items: center; gap: 10px; }
+        .logo a { font-size: 26px; font-weight: 700; color: var(--text-light); text-decoration: none; }
+        .logo svg { width: 28px; height: 28px; fill: var(--primary-accent); }
+        nav ul { display: flex; list-style: none; gap: 30px; align-items: center; }
+        nav ul a { text-decoration: none; color: var(--text-muted); font-weight: 500; transition: color 0.3s ease; }
+        nav ul a:hover { color: var(--text-light); }
+        .menu-toggle { display: none; font-size: 30px; cursor: pointer; background: none; border: none; color: var(--text-light); }
+        
+        .container { max-width: 800px; margin: 50px auto; padding: 0 20px; }
+        .form-card {
             background: var(--bg-card);
-            border-radius: 16px;
             padding: 40px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+            border-radius: 16px;
             border: 1px solid var(--border-color);
-            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            animation: formFadeIn 0.5s ease-out;
         }
-
-        h1 {
+        @keyframes formFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .form-card h2 {
             text-align: center;
-            font-size: 2.2rem;
+            font-size: 2.5rem;
             margin-bottom: 30px;
-            color: var(--text-light);
             font-weight: 700;
-            position: relative;
+            background: -webkit-linear-gradient(135deg, var(--warning-color), #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-
-        h1::after {
-            content: "";
-            display: block;
-            width: 70px;
-            height: 3px;
-            background: var(--primary-accent);
-            margin: 10px auto 0;
-            border-radius: 2px;
-        }
-
-        form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            margin-bottom: 8px;
-            font-size: 1rem;
-            font-weight: 500;
-            color: var(--text-muted);
-        }
-
-        input[type="text"],
-        textarea {
+        form { display: flex; flex-direction: column; gap: 25px; }
+        .input-group { display: flex; flex-direction: column; }
+        label { margin-bottom: 10px; font-size: 1rem; font-weight: 500; color: var(--text-muted); }
+        input[type="text"], textarea {
             width: 100%;
             padding: 14px 18px;
             border-radius: 10px;
             border: 1px solid #4a4a58;
-            background-color: #161625;
+            background-color: var(--bg-dark);
             color: var(--text-light);
             font-size: 1rem;
             transition: box-shadow 0.25s ease, border-color 0.25s ease;
         }
-
-        input[type="text"]:focus,
-        textarea:focus {
+        input[type="text"]:focus, textarea:focus {
             outline: none;
-            border-color: var(--primary-accent);
-            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
+            border-color: var(--warning-color);
+            box-shadow: 0 0 0 4px rgba(245, 158, 11, 0.2);
         }
-
-        textarea {
-            resize: vertical;
-            min-height: 150px;
-        }
-
-        button {
+        textarea { resize: vertical; min-height: 200px; }
+        .btn-submit {
             padding: 15px;
-            font-size: 1rem;
+            font-size: 1.1rem;
             font-weight: 600;
             border: none;
             border-radius: 10px;
-            background: linear-gradient(135deg, #a855f7, #9333ea);
-            color: white;
+            background: linear-gradient(135deg, var(--warning-color), #d97706);
+            color: #121212;
             cursor: pointer;
             margin-top: 10px;
-            transition: all .2s ease;
+            transition: all .3s ease;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
         }
-
-        button:hover {
+        .btn-submit:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 20px rgba(147, 51, 234, 0.3);
+            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
         }
-        
-        button:active {
-            transform: translateY(-1px);
+        footer {
+            background: #101010;
+            color: var(--text-muted);
+            text-align: center; padding: 25px;
+            margin-top: 50px;
+            border-top: 1px solid var(--border-color);
         }
 
         @media(max-width: 768px) {
-            .edit-wrapper {
-                padding: 30px 25px;
-            }
-            h1 {
-                font-size: 2rem;
-            }
-        }
-        
-        @media(max-width: 480px) {
-            body {
-                padding: 15px;
-                align-items: flex-start;
-            }
-            .edit-wrapper {
-                padding: 25px 20px;
-            }
-            h1 {
-                font-size: 1.8rem;
-            }
-            textarea {
-                min-height: 120px;
-            }
+            nav ul { display: none; flex-direction: column; background: var(--bg-card); border: 1px solid var(--border-color); position: absolute; top: 100%; right: 5%; width: 250px; padding: 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+            nav ul.active { display: flex; }
+            .menu-toggle { display: block; }
+            .form-card { padding: 25px; }
+            .form-card h2 { font-size: 2rem; }
+            .container { margin: 30px auto; }
         }
     </style>
 </head>
 <body>
-
-<div class="edit-wrapper">
-    <h1>Edit Your Blog</h1>
-    <form id="editBlogForm">
-        <div class="input-group">
-            <label for="title">Blog Title</label>
-            <input type="text" id="title" name="title" value="<%= blog.title %>" required>
+    <header class="navbar">
+        <div class="logo">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.7,5.2a1.7,1.7,0,0,0-2.4,0L11.5,12,6.2,5.5a1.8,1.8,0,0,0-2.5,0,1.8,1.8,0,0,0,0,2.5L8.9,12,3.7,17.2a1.8,1.8,0,0,0,0,2.5,1.8,1.8,0,0,0,2.5,0L11.5,14l7.8,9.2a1.7,1.7,0,0,0,2.4,0,1.7,1.7,0,0,0,0-2.4L14.1,12l6.6-6.6A1.7,1.7,0,0,0,20.7,5.2Z"></path></svg>
+            <a href="/home">MyBlog</a>
         </div>
-        <div class="input-group">
-            <label for="describe">Blog Content</label>
-            <textarea id="describe" name="describe" rows="6" required><%= blog.describe %></textarea>
+        <nav>
+            <ul id="menu">
+                <li><a href="/home">Home</a></li>
+                <li><a href="/show-all-blog">Blogs</a></li>
+            </ul>
+        </nav>
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+    </header>
+
+    <div class="container">
+        <div class="form-card">
+            <h2>Refine Your Story</h2>
+            <form id="editBlogForm">
+                <div class="input-group">
+                    <label for="title">Blog Title</label>
+                    <input type="text" id="title" name="title" value="<%= blog.title %>" required>
+                </div>
+                <div class="input-group">
+                    <label for="describe">Your Story</label>
+                    <textarea id="describe" name="describe" rows="6" required><%= blog.describe %></textarea>
+                </div>
+                <button type="submit" class="btn-submit">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16"><path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/><path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/></svg>
+                    Update Blog
+                </button>
+            </form>
         </div>
-        <button type="submit">Update Blog</button>
-    </form>
-</div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2025 MyBlog | All Rights Reserved</p>
+    </footer>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    const form = document.getElementById('editBlogForm');
-
-    form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
-
-        const {
-            isConfirmed
-        } = await Swal.fire({
-            title: 'Update Blog?',
-            text: 'Do you want to save these changes?',
-            icon: 'question',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, update it!',
-            cancelButtonText: 'Cancel',
-            reverseButtons: true,
-            background: '#1e1e2d',
-            color: '#f0f0f0'
-        });
-
-        if (!isConfirmed) return;
-
-        try {
-            const response = await fetch('/edit-blog/<%= blog.id %>', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(data)
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function toggleMenu() { document.getElementById("menu").classList.toggle("active"); }
+        const form = document.getElementById('editBlogForm');
+        form.addEventListener('submit', async function(e){
+            e.preventDefault();
+            const formData = new FormData(form);
+            const data = Object.fromEntries(formData.entries());
+            const { isConfirmed } = await Swal.fire({
+                title: 'Update Blog?', text: 'Do you want to save these changes?', icon: 'question',
+                showCancelButton: true, confirmButtonText: 'Yes, update it!', cancelButtonText: 'Cancel',
+                reverseButtons: true, background: '#1e1e1e', color: '#f0f0f0', confirmButtonColor: '#f59e0b'
             });
-
-            const result = await response.json();
-
-            if (result.success) {
-                await Swal.fire({
-                    title: 'Updated!',
-                    text: result.message || 'Blog updated successfully.',
-                    icon: 'success',
-                    background: '#1e1e2d',
-                    color: '#f0f0f0'
+            if(!isConfirmed) return;
+            try {
+                const response = await fetch('/edit-blog/<%= blog.id %>', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data)
                 });
-                // Optional: Redirect after successful update
-                window.location.href = '/show-my-blog/<%= blog.userId %>'; // Adjust this URL if needed
-            } else {
-                Swal.fire({
-                    title: 'Error!',
-                    text: result.message || 'Something went wrong.',
-                    icon: 'error',
-                    background: '#1e1e2d',
-                    color: '#f0f0f0'
-                });
+                const result = await response.json();
+                if(result.success){
+                    await Swal.fire({ title: 'Updated!', text: result.message || 'Blog updated successfully.', icon: 'success', background: '#1e1e1e', color: '#f0f0f0' });
+        
+                } else {
+                    Swal.fire({ title: 'Error!', text: result.message || 'Something went wrong.', icon: 'error', background: '#1e1e1e', color: '#f0f0f0' });
+                }
+            } catch (err) {
+                Swal.fire({ title: 'Error!', text: 'Server error. Please try again later.', icon: 'error', background: '#1e1e1e', color: '#f0f0f0' });
+                console.error(err);
             }
-        } catch (err) {
-            Swal.fire({
-                title: 'Error!',
-                text: 'Server error. Please try again later.',
-                icon: 'error',
-                background: '#1e1e2d',
-                color: '#f0f0f0'
-            });
-            console.error(err);
-        }
-    });
-</script>
-
+        });
+    </script>
 </body>
 </html>
+

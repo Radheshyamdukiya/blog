@@ -3,12 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register Page</title>
+    <title>Register Page | MyBlog</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
+        :root {
+            --bg-dark: #121212;
+            --bg-card: #1e1e1e;
+            --primary-accent: #a855f7;
+            --text-light: #f0f0f0;
+            --text-muted: #a0a0b0;
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -21,26 +30,30 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background-color: #1a1a2e;
-            background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
-            background-size: 20px 20px;
+            background-color: var(--bg-dark);
             padding: 20px;
-            color: #f0f0f0;
+            color: var(--text-light);
+            overflow: hidden;
         }
 
         .register-container {
             width: 100%;
             max-width: 450px;
-            background: #1e1e2d;
+            background: var(--bg-card);
             border-radius: 16px;
             padding: 40px;
             box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-color);
             position: relative;
             overflow: hidden;
-            transition: all 0.3s ease;
+            animation: fadeIn 0.5s ease-out;
         }
-        
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .register-container::before {
             content: '';
             position: absolute;
@@ -48,14 +61,12 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: conic-gradient(transparent, rgba(168, 85, 247, 0.1), transparent 30%);
-            animation: rotate 6s linear infinite;
+            background: conic-gradient(transparent, rgba(168, 85, 247, 0.2), transparent 30%);
+            animation: rotate 8s linear infinite;
         }
 
         @keyframes rotate {
-            100% {
-                transform: rotate(360deg);
-            }
+            100% { transform: rotate(360deg); }
         }
 
         h1 {
@@ -81,20 +92,18 @@
             margin-bottom: 18px;
             border-radius: 10px;
             border: 1px solid #4a4a58;
-            background-color: #161625;
-            color: #f0f0f0;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
             font-size: 16px;
             transition: box-shadow 0.25s ease, border-color 0.25s ease;
         }
 
-        input::placeholder {
-            color: #777;
-        }
+        input::placeholder { color: #777; }
 
         input:focus {
             outline: none;
-            border-color: #a855f7;
-            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
+            border-color: var(--primary-accent);
+            box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.2);
         }
         
         input:last-of-type {
@@ -111,7 +120,7 @@
             font-weight: 600;
             font-size: 16px;
             cursor: pointer;
-            transition: all .2s ease;
+            transition: all .3s ease;
         }
         
         button[type="submit"]:hover {
@@ -121,65 +130,58 @@
 
         button[type="submit"]:active {
             transform: translateY(-1px);
-            box-shadow: 0 4px 10px rgba(147, 51, 234, 0.3);
         }
 
         .bottom-link {
             text-align: center;
             margin-top: 25px;
             font-size: 15px;
-            color: #a0a0b0;
+            color: var(--text-muted);
             position: relative;
             z-index: 2;
         }
 
         .bottom-link a {
-            color: #a855f7;
+            color: var(--primary-accent);
             text-decoration: none;
             font-weight: 600;
+            transition: all 0.2s ease;
         }
 
         .bottom-link a:hover {
             text-decoration: underline;
+            filter: brightness(1.2);
         }
 
         @media(max-width: 480px) {
-            .register-container {
-                padding: 30px 25px;
-            }
-            h1 {
-                font-size: 2rem;
-            }
-            input[type="text"],
-            input[type="email"],
-            input[type="tel"],
-            input[type="password"] {
-                padding: 12px 16px;
-                font-size: 15px;
-            }
-            button[type="submit"] {
-                padding: 12px;
-                font-size: 15px;
-            }
+            .register-container { padding: 30px 25px; }
+            h1 { font-size: 2rem; }
         }
     </style>
 </head>
 <body>
 
     <div class="register-container">
-        <h1>Create Account</h1>
+        <h1>Join Our Community</h1>
         <form id="registerForm">
             <input type="text" placeholder="Choose a username" name="username" required>
             <input type="email" placeholder="Enter your email" name="email" required>
             <input type="tel" placeholder="Enter your mobile number" name="mobilenum" required>
             <input type="password" placeholder="Create a password" name="password" required>
-            <button type="submit">Register</button>
+            <button type="submit">Create Account</button>
         </form>
         <p class="bottom-link">Already have an account? <a href="/login">Login here</a></p>
     </div>
 
     <script>
         const registerForm = document.getElementById('registerForm');
+
+        const swalDark = {
+            background: '#1e1e1e',
+            color: '#f0f0f0',
+            confirmButtonColor: '#a855f7',
+            cancelButtonColor: '#4a4a58'
+        };
 
         registerForm.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -192,35 +194,34 @@
             };
 
             if (!formData.username || !formData.email || !formData.mobilenum || !formData.password) {
-                Swal.fire('Error', 'Please fill all fields', 'error');
+                Swal.fire({ ...swalDark, icon: 'error', title: 'Oops...', text: 'Please fill all fields!' });
                 return;
             }
 
             try {
                 const res = await fetch('/register', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(formData)
                 });
 
                 const data = await res.json();
 
                 if (data.success) {
-                    Swal.fire('Success', data.message || 'Account created successfully', 'success')
+                    Swal.fire({ ...swalDark, icon: 'success', title: 'Success!', text: data.message || 'Account created successfully.' })
                         .then(() => {
                             window.location.href = '/login';
                         });
                 } else {
-                    Swal.fire('Error', data.message || 'Registration failed', 'error');
+                    Swal.fire({ ...swalDark, icon: 'error', title: 'Registration Failed', text: data.message || 'Please try again.' });
                 }
 
             } catch (err) {
-                Swal.fire('Error', 'Server error. Please try again later.', 'error');
+                Swal.fire({ ...swalDark, icon: 'error', title: 'Server Error', text: 'An error occurred. Please try again later.' });
                 console.error(err);
             }
         });
     </script>
 </body>
 </html>
+

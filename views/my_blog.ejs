@@ -3,382 +3,229 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Home</title>
+    <title>My Blogs | MyBlog</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         :root {
-            --bg-dark: #1a1a2e;
-            --bg-card: #1e1e2d;
+            --bg-dark: #121212;
+            --bg-card: #1e1e1e;
             --primary-accent: #a855f7;
             --text-light: #f0f0f0;
             --text-muted: #a0a0b0;
-            --border-color: rgba(255, 255, 255, 0.1);
-            --danger-color: #e11d48;
+            --border-color: rgba(255, 255, 255, 0.15);
+            --danger-color: #ef4444;
             --warning-color: #f59e0b;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-
-        body {
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        
+        html, body {
+            overflow-x: hidden;
             background-color: var(--bg-dark);
             color: var(--text-light);
-            line-height: 1.6;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
 
-        .navbar {
-            background: rgba(30, 30, 45, 0.8);
+        header {
+            background: rgba(30, 30, 30, 0.7);
             backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             padding: 15px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+            position: sticky; top: 0; z-index: 1000;
         }
 
-        .navbar .logo {
-            font-size: 26px;
-            font-weight: 700;
-            color: var(--text-light);
-            text-decoration: none;
-        }
-
-        .navbar .nav-links {
+        .logo {
             display: flex;
-            list-style: none;
-            gap: 30px;
+            align-items: center;
+            gap: 10px;
         }
-        
-        .navbar .nav-links a {
-            text-decoration: none;
-            color: var(--text-muted);
-            font-weight: 500;
-            transition: color 0.3s ease;
-            position: relative;
-            padding-bottom: 5px;
+        .logo a { 
+            font-size: 26px; 
+            font-weight: 700; 
+            color: var(--text-light); 
+            text-decoration: none; 
         }
-
-        .navbar .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: var(--primary-accent);
-            transition: width 0.3s ease;
+        .logo svg {
+            width: 28px;
+            height: 28px;
+            fill: var(--primary-accent);
         }
 
-        .navbar .nav-links a:hover {
-            color: var(--text-light);
-        }
-        
-        .navbar .nav-links a:hover::after {
-            width: 100%;
-        }
+        nav ul { display: flex; list-style: none; gap: 30px; }
+        nav ul a { text-decoration: none; color: var(--text-muted); font-weight: 500; transition: color 0.3s ease; }
+        nav ul a:hover { color: var(--text-light); }
+        .menu-toggle { display: none; font-size: 30px; cursor: pointer; background: none; border: none; color: var(--text-light); }
 
-        .menu-toggle {
-            display: none;
-            font-size: 30px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            color: var(--text-light);
-        }
-
-        .container {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 30px;
-            max-width: 1400px;
-            margin: 30px auto;
-            padding: 0 5%;
-        }
-
-        .sidebar {
+        .hero {
+            text-align: center;
+            padding: 80px 20px;
             background: var(--bg-card);
-            padding: 25px;
-            border-radius: 16px;
-            border: 1px solid var(--border-color);
-            align-self: start; /* Sticks to the top */
-        }
-
-        .sidebar h3 {
-            margin-bottom: 20px;
-            font-weight: 600;
-            padding-bottom: 10px;
             border-bottom: 1px solid var(--border-color);
         }
-
-        .sidebar ul {
-            list-style: none;
+        .hero h1 {
+            font-size: 42px;
+            font-weight: 700;
+            background: -webkit-linear-gradient(135deg, #a855f7, #ffffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
+        .hero p { font-size: 18px; color: var(--text-muted); max-width: 600px; margin: 10px auto 0; }
         
-        .sidebar ul li a {
-            text-decoration: none;
-            color: var(--text-muted);
-            transition: all 0.3s;
-            font-size: 16px;
-            display: block;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 5px;
-        }
-        
-        .sidebar ul li a:hover {
-            color: var(--text-light);
-            background-color: rgba(168, 85, 247, 0.1);
-            transform: translateX(5px);
-        }
-
+        .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
         .blog-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 30px;
         }
-
         .blog-card {
             background: var(--bg-card);
             border-radius: 16px;
-            padding: 25px;
             border: 1px solid var(--border-color);
             box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
+            animation: cardFadeIn 0.5s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
         }
-
+        @keyframes cardFadeIn { to { opacity: 1; transform: translateY(0); } }
         .blog-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 0 30px rgba(168, 85, 247, 0.25);
         }
+        .card-content { padding: 25px; flex-grow: 1; display: flex; flex-direction: column; }
+        .blog-card h2 { font-size: 1.6rem; margin-bottom: 12px; color: var(--text-light); }
+        .blog-card p { color: var(--text-muted); font-size: 1rem; line-height: 1.7; flex-grow: 1; }
 
-        .author-box {
-            color: var(--text-muted);
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 15px;
-        }
-        
-        .author-box span {
-            color: var(--primary-accent);
-            font-weight: 600;
-        }
-
-        .blog-card h2 {
-            font-size: 1.6rem;
-            margin-bottom: 12px;
-            color: var(--text-light);
-            font-weight: 600;
-        }
-
-        .blog-card p {
-            color: var(--text-muted);
-            font-size: 1rem;
-            line-height: 1.7;
-            flex-grow: 1; /* Pushes actions to the bottom */
-        }
-
-        .blog-actions {
+        .card-actions {
+            border-top: 1px solid var(--border-color);
+            padding: 15px 25px;
             display: flex;
-            gap: 12px;
-            margin-top: 25px;
+            gap: 15px;
+            background: var(--bg-dark);
         }
-
-        .blog-actions button {
-            padding: 8px 16px;
-            border: none;
+        .action-btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid transparent;
             border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 14px;
-            color: #fff;
             transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 6px;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
         }
+        .edit-btn { background-color: rgba(245, 158, 11, 0.1); color: var(--warning-color); border-color: var(--warning-color);}
+        .edit-btn:hover { background-color: var(--warning-color); color: var(--bg-dark); }
+        .delete-btn { background-color: rgba(239, 68, 68, 0.1); color: var(--danger-color); border-color: var(--danger-color); }
+        .delete-btn:hover { background-color: var(--danger-color); color: #fff; }
 
-        .blog-actions .edit-btn {
-            background: var(--warning-color);
-        }
-        .blog-actions .edit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
-        }
-        .blog-actions .delete-btn {
-            background: var(--danger-color);
-        }
-        .blog-actions .delete-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(225, 29, 72, 0.4);
-        }
-
-        @media(max-width: 1024px) {
-            .container {
-                grid-template-columns: 220px 1fr;
-            }
-        }
+        footer { background: #101010; color: var(--text-muted); text-align: center; padding: 25px; margin-top: 50px; border-top: 1px solid var(--border-color); }
+        .no-blogs { text-align: center; padding: 50px; font-size: 1.2rem; color: var(--text-muted); }
 
         @media(max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-                padding: 0 5%;
-                margin-top: 20px;
-            }
-            .sidebar {
-                margin-bottom: 0;
-            }
-            .navbar .nav-links {
-                display: none;
-                flex-direction: column;
-                background: var(--bg-card);
-                border: 1px solid var(--border-color);
-                position: absolute;
-                top: 70px;
-                right: 5%;
-                width: 250px;
-                padding: 20px;
-                border-radius: 12px;
-                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-                gap: 10px;
-            }
-            .navbar .nav-links.active {
-                display: flex;
-            }
-            .menu-toggle {
-                display: block;
-            }
-        }
-
-        @media(max-width: 480px) {
-            .blog-container {
-                grid-template-columns: 1fr;
-            }
-            .blog-card h2 {
-                font-size: 1.4rem;
-            }
+            nav ul { display: none; flex-direction: column; background: var(--bg-card); border: 1px solid var(--border-color); position: absolute; top: 100%; right: 5%; width: 250px; padding: 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.4); }
+            nav ul.active { display: flex; }
+            .menu-toggle { display: block; }
+            .hero h1 { font-size: 32px; }
         }
     </style>
 </head>
 <body>
 
 <header class="navbar">
-    <a href="#" class="logo">MyBlog</a>
+    <div class="logo">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M20.7,5.2a1.7,1.7,0,0,0-2.4,0L11.5,12,6.2,5.5a1.8,1.8,0,0,0-2.5,0,1.8,1.8,0,0,0,0,2.5L8.9,12,3.7,17.2a1.8,1.8,0,0,0,0,2.5,1.8,1.8,0,0,0,2.5,0L11.5,14l7.8,9.2a1.7,1.7,0,0,0,2.4,0,1.7,1.7,0,0,0,0-2.4L14.1,12l6.6-6.6A1.7,1.7,0,0,0,20.7,5.2Z"></path></svg>
+        <a href="/home">MyBlog</a>
+    </div>
     <nav>
-        <div class="nav-links" id="menu">
-            <a href="/home">Home</a>
-            <a href="/show-blog">Blogs</a>
-            <a href="/about">About</a>
-            <a href="/contact">Contact</a>
-        </div>
+        <ul id="menu">
+            <li><a href="/home">Home</a></li>
+            <li><a href="/show-all-blog">Blogs</a></li>
+        </ul>
     </nav>
     <button class="menu-toggle" onclick="toggleMenu()">☰</button>
 </header>
 
-<div class="container">
-    <aside class="sidebar">
-        <h3>Categories</h3>
-        <ul>
-            <li><a href="#">🚀 Technology</a></li>
-            <li><a href="#">🌿 Lifestyle</a></li>
-            <li><a href="#">✈️ Travel</a></li>
-            <li><a href="#">🍔 Food</a></li>
-            <li><a href="#">📚 Education</a></li>
-        </ul>
-    </aside>
+<section class="hero">
+    <h1>Manage Your Articles</h1>
+    <p>Here you can edit or delete the amazing stories you've written.</p>
+</section>
 
+<div class="container">
     <main class="blog-container">
-        <% blogs.forEach(blog => { %>
-            <div class="blog-card">
-                <div class="author-box">
-                    By <span><%= blog.username %></span>
+        <% if(blogs && blogs.length > 0) { %>
+            <% blogs.forEach((blog, index) => { %>
+                <div class="blog-card" style="animation-delay: <%= index * 100 %>ms">
+                    <div class="card-content">
+                        <h2><%= blog.title %></h2>
+                        <p><%= blog.describe.substring(0, 150) %>...</p>
+                    </div>
+                    <div class="card-actions">
+                        <a href="/edit-blog/<%= blog._id %>" class="action-btn edit-btn">
+                           <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"/><path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"/></svg>
+                            Edit
+                        </a>
+                        <form action="/delete-blog/<%= blog._id %>" method="POST" class="delete-form" style="flex: 1;">
+                            <button type="submit" class="action-btn delete-btn">
+                                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/><path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/></svg>
+                                Delete
+                            </button>
+                        </form>
+                    </div>
                 </div>
-                <h2><%= blog.title %></h2>
-                <p><%= blog.describe %></p>
-                <div class="blog-actions">
-                    <form action="/edit-blog/<%= blog._id %>" method="GET" style="display:inline;">
-                        <button type="submit" class="edit-btn">✏️ Edit</button>
-                    </form>
-                    <form class="delete-form" action="/delete-blog/<%= blog._id %>" method="POST" style="display:inline;">
-                        <button type="submit" class="delete-btn">🗑️ Delete</button>
-                    </form>
-                </div>
-            </div>
-        <% }) %>
+            <% }) %>
+        <% } else { %>
+            <p class="no-blogs">You haven't created any blogs yet. Let's write your first story!</p>
+        <% } %>
     </main>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-    function toggleMenu() {
-        document.getElementById("menu").classList.toggle("active");
-    }
+<footer>
+    <p>&copy; 2025 MyBlog | All Rights Reserved</p>
+</footer>
 
+<script>
+    function toggleMenu() { document.getElementById("menu").classList.toggle("active"); }
+    
     document.querySelectorAll(".delete-form").forEach((form) => {
         form.addEventListener("submit", async (e) => {
             e.preventDefault();
-            
             const result = await Swal.fire({
                 title: "Are you sure?",
                 text: "You won't be able to revert this!",
                 icon: "warning",
                 showCancelButton: true,
-                confirmButtonColor: "#3085d6",
-                cancelButtonColor: "#d33",
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
                 confirmButtonText: "Yes, delete it!",
-                background: '#1e1e2d',
+                background: '#1e1e1e',
                 color: '#f0f0f0'
             });
-
             if (result.isConfirmed) {
                 try {
-                    const res = await fetch(form.action, {
-                        method: "POST",
-                    });
+                    const res = await fetch(form.action, { method: "POST" });
                     const data = await res.json();
-
                     if (data.success) {
                         Swal.fire({
-                            icon: "success",
                             title: "Deleted!",
-                            text: "Your blog post has been deleted.",
-                            showConfirmButton: false,
-                            timer: 1500,
-                            background: '#1e1e2d',
+                            text: "Your blog has been deleted.",
+                            icon: "success",
+                            background: '#1e1e1e',
                             color: '#f0f0f0'
-                        }).then(() => {
-                            window.location.reload();
-                        });
+                        }).then(() => window.location.reload());
                     } else {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: "Something went wrong!",
-                            background: '#1e1e2d',
-                            color: '#f0f0f0'
-                        });
+                        Swal.fire({ title: "Error!", text: "Could not delete the blog.", icon: "error", background: '#1e1e1e', color: '#f0f0f0' });
                     }
-                } catch (error) {
-                     Swal.fire({
-                        icon: "error",
-                        title: "Server Error",
-                        text: "Could not connect to the server.",
-                        background: '#1e1e2d',
-                        color: '#f0f0f0'
-                    });
+                } catch (err) {
+                    Swal.fire({ title: "Error!", text: "Server error.", icon: "error", background: '#1e1e1e', color: '#f0f0f0' });
                 }
             }
         });
@@ -387,3 +234,4 @@
 
 </body>
 </html>
+

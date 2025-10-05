@@ -5,10 +5,19 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Login Page</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <style>
+    :root {
+        --bg-dark: #121212;
+        --bg-card: #1e1e1e;
+        --primary-accent: #a855f7;
+        --text-light: #f0f0f0;
+        --text-muted: #a0a0b0;
+        --border-color: rgba(255, 255, 255, 0.1);
+    }
+
     * {
         box-sizing: border-box;
         margin: 0;
@@ -21,24 +30,28 @@
         justify-content: center;
         align-items: center;
         min-height: 100vh;
-        background-color: #1a1a2e;
-        background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.05) 1px, transparent 0);
-        background-size: 20px 20px;
+        background-color: var(--bg-dark);
         padding: 20px;
-        color: #f0f0f0;
+        color: var(--text-light);
+        overflow: hidden;
     }
 
     .login-container {
         width: 100%;
         max-width: 420px;
-        background: #1e1e2d;
+        background: var(--bg-card);
         border-radius: 16px;
         padding: 40px;
         box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-color);
         position: relative;
         overflow: hidden;
-        transition: all 0.3s ease;
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
     }
 
     .login-container::before {
@@ -48,14 +61,12 @@
         left: -50%;
         width: 200%;
         height: 200%;
-        background: conic-gradient(transparent, rgba(168, 85, 247, 0.1), transparent 30%);
-        animation: rotate 6s linear infinite;
+        background: conic-gradient(transparent, rgba(168, 85, 247, 0.2), transparent 30%);
+        animation: rotate 8s linear infinite;
     }
 
     @keyframes rotate {
-        100% {
-            transform: rotate(360deg);
-        }
+        100% { transform: rotate(360deg); }
     }
 
     .login-container h1 {
@@ -68,7 +79,7 @@
     }
 
     .login-container h2 {
-        color: #a0a0b0;
+        color: var(--text-muted);
         margin-bottom: 28px;
         text-align: center;
         font-size: 1rem;
@@ -88,20 +99,18 @@
         margin-bottom: 16px;
         border-radius: 10px;
         border: 1px solid #4a4a58;
-        background-color: #161625;
-        color: #f0f0f0;
+        background-color: var(--bg-dark);
+        color: var(--text-light);
         font-size: 16px;
         transition: box-shadow 0.25s ease, border-color 0.25s ease;
     }
 
-    input::placeholder {
-        color: #777;
-    }
+    input::placeholder { color: #777; }
 
     input:focus {
         outline: none;
-        border-color: #a855f7;
-        box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.2);
+        border-color: var(--primary-accent);
+        box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.2);
     }
 
     button {
@@ -118,7 +127,7 @@
         justify-content: center;
         align-items: center;
         gap: 10px;
-        transition: all .2s ease;
+        transition: all .3s ease;
         margin-top: 10px;
     }
 
@@ -129,7 +138,6 @@
 
     button:active {
         transform: translateY(-1px);
-        box-shadow: 0 4px 10px rgba(147, 51, 234, 0.3);
     }
 
     button[disabled] {
@@ -148,44 +156,33 @@
         text-align: center;
         margin-top: 20px;
         font-size: 14px;
-        color: #a0a0b0;
+        color: var(--text-muted);
         position: relative;
         z-index: 2;
     }
 
     .small-text a {
-        color: #a855f7;
+        color: var(--primary-accent);
         text-decoration: none;
         font-weight: 600;
-        pointer-events: none;
-        cursor: default;
+        transition: all 0.2s ease;
+    }
+    .small-text a:hover {
+        text-decoration: underline;
+        filter: brightness(1.2);
     }
 
     @media(max-width: 480px) {
-        .login-container {
-            padding: 30px;
-        }
-        .login-container h1 {
-            font-size: 2rem;
-        }
-        input[type="email"],
-        input[type="password"],
-        input[type="text"] {
-            padding: 12px 16px;
-            font-size: 15px;
-        }
-        button {
-            padding: 12px;
-            font-size: 15px;
-        }
+        .login-container { padding: 30px; }
+        .login-container h1 { font-size: 2rem; }
     }
 </style>
 </head>
 <body>
 
 <div class="login-container">
-    <h1>Login</h1>
-    <h2>Welcome back</h2>
+    <h1>Welcome Back</h1>
+    <h2>Sign in to continue</h2>
 
     <form id="otpLoginForm" autocomplete="off" novalidate>
         <input type="email" name="email" placeholder="Enter your email" required>
@@ -203,7 +200,7 @@
         <button type="submit" id="verifyOtpBtn" style="display:none;">Verify OTP</button>
     </form>
 
-    <p class="small-text">New user? <a>Register now</a></p>
+    <p class="small-text">New here? <a href="/register">Create an Account</a></p>
 </div>
 
 <script>
@@ -214,12 +211,19 @@ const otpSection = document.getElementById('otpSection');
 const sendBtnText = document.getElementById('sendBtnText');
 const loader = document.getElementById('loader');
 
+const swalDark = {
+    background: '#1e1e1e',
+    color: '#f0f0f0',
+    confirmButtonColor: '#a855f7',
+    cancelButtonColor: '#4a4a58'
+};
+
 sendOtpBtn.addEventListener('click', async () => {
     const email = otpForm.email.value.trim();
     const password = otpForm.password.value.trim();
 
     if(!email || !password){
-        Swal.fire('Error','Please enter both email and password','error');
+        Swal.fire({ ...swalDark, icon: 'error', title: 'Oops...', text: 'Please enter both email and password!' });
         return;
     }
 
@@ -236,7 +240,7 @@ sendOtpBtn.addEventListener('click', async () => {
         const verifyData = await verifyRes.json();
 
         if(!verifyData.success){
-            Swal.fire('Error',verifyData.message||'User not registered or wrong password','error');
+            Swal.fire({ ...swalDark, icon: 'error', title: 'Login Failed', text: verifyData.message || 'User not registered or wrong password' });
             sendBtnText.style.display='inline';
             loader.style.display='none';
             sendOtpBtn.disabled=false;
@@ -247,12 +251,12 @@ sendOtpBtn.addEventListener('click', async () => {
         const otpData = await otpRes.json();
 
         if(otpData.success){
-            Swal.fire('OTP Sent!','Please check your email.','success');
+            Swal.fire({ ...swalDark, icon: 'success', title: 'OTP Sent!', text: 'Please check your email.' });
             otpSection.style.display='block';
             sendOtpBtn.style.display='none';
             verifyOtpBtn.style.display='block';
         }else{
-            Swal.fire('Failed','Could not send OTP. Try again later.','error');
+            Swal.fire({ ...swalDark, icon: 'error', title: 'Failed', text: 'Could not send OTP. Try again later.' });
             sendBtnText.style.display='inline';
             loader.style.display='none';
             sendOtpBtn.disabled=false;
@@ -260,7 +264,7 @@ sendOtpBtn.addEventListener('click', async () => {
 
     }catch(err){
         console.error(err);
-        Swal.fire('Error','Server error while sending OTP.','error');
+        Swal.fire({ ...swalDark, icon: 'error', title: 'Server Error', text: 'An error occurred while sending the OTP.' });
         sendBtnText.style.display='inline';
         loader.style.display='none';
         sendOtpBtn.disabled=false;
@@ -274,7 +278,7 @@ otpForm.addEventListener('submit', async (e)=>{
     const otp = otpForm.otp.value.trim();
 
     if(!otp){
-        Swal.fire('Error','Please enter OTP','error');
+        Swal.fire({ ...swalDark, icon: 'error', title: 'Oops...', text: 'Please enter the OTP!' });
         return;
     }
 
@@ -287,19 +291,20 @@ otpForm.addEventListener('submit', async (e)=>{
         const data = await res.json();
 
         if(data.success){
-            Swal.fire('Success!','OTP Verified Successfully!','success').then(()=>{
+            Swal.fire({ ...swalDark, icon: 'success', title: 'Success!', text: 'OTP Verified Successfully!' }).then(()=>{
                 window.location.href = data.redirectUrl || '/home';
             });
         }else{
-            Swal.fire('Invalid OTP',data.message || 'Please check OTP','error');
+            Swal.fire({ ...swalDark, icon: 'error', title: 'Invalid OTP', text: data.message || 'Please check the OTP and try again.' });
         }
 
     }catch(err){
         console.error(err);
-        Swal.fire('Error','Server error during verification.','error');
+        Swal.fire({ ...swalDark, icon: 'error', title: 'Server Error', text: 'An error occurred during verification.' });
     }
 });
 </script>
 
 </body>
 </html>
+
